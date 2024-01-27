@@ -1,0 +1,24 @@
+version: '3'
+services:
+  7daystodie:
+    image: cm2network/steamcmd:latest
+    container_name: 7daystodie
+    command: >
+      bash -c "
+        cd /home/steam &&
+        /bin/bash /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/7daystodie +login anonymous +app_update 294420 validate +quit &&
+        cd /home/steam/7daystodie &&
+        ./startserver.sh -configfile=/home/steam/7daystodie/serverconfig.xml
+      "
+    environment:
+      - STEAMAPP=294420
+      - STEAMAPPDIR=/home/steam/7daystodie
+      - SERVER_START="./startserver.sh -configfile=/home/steam/7daystodie/serverconfig.xml"
+    volumes:
+      - /home/berardinux/docker/data:/home/steam/7daystodie
+    ports:
+      - "26900:26900/udp"
+      - "26900:26900/tcp"
+      - "26901:26901/udp"
+      - "26901:26901/tcp"
+    restart: unless-stopped
